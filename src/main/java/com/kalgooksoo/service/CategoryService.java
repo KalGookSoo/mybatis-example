@@ -35,4 +35,8 @@ public class CategoryService {
         this.categoryMapper.insert(category);
     }
 
+    public void update(Category category) {
+        this.categoryMapper.update(category);
+    }
+
 }

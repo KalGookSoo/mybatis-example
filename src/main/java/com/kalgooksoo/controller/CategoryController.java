@@ -1,45 +1,123 @@
 package com.kalgooksoo.controller;
 
+import com.kalgooksoo.command.CategoryCommand;
 import com.kalgooksoo.criteria.CategoryCriteria;
+import com.kalgooksoo.mapstruct.CategoryMapper;
 import com.kalgooksoo.model.Category;
 import com.kalgooksoo.service.CategoryService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
-@RestController
+@Controller
 @RequestMapping("/categories")
 public class CategoryController {
 
+    /**
+     * 카테고리 관리 서비스 객체
+     */
     private CategoryService categoryService;
+
+    /**
+     * 카테고리 데이터 변환 매퍼
+     */
+    private final CategoryMapper categoryMapper = CategoryMapper.INSTANCE;
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
+    /**
+     * 카테고리 초기 페이지
+     *
+     * @param model    모델
+     * @param criteria 검색 및 페이징 조건
+     * @return 뷰
+     */
     @GetMapping
-    public ResponseEntity<Collection<Category>> findAll(CategoryCriteria criteria) {
-        return ResponseEntity.ok(this.categoryService.findByPage(criteria));
+    public String index(Model model, CategoryCriteria criteria) {
+        Collection<Category> categories = this.categoryService.findByPage(criteria);
+        model.addAttribute("categories", categories);
+        return "category/index";
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Category> find(@PathVariable Long id) {
-        return ResponseEntity.ok(this.categoryService.findById(id));
+    /**
+     * 카테고리 수정 페이지
+     *
+     * @param model 모델
+     * @param id    카테고리 식별자
+     * @return 뷰
+     */
+    @GetMapping("/{id}")
+    public String update(Model model, @PathVariable Long id) {
+
+        // TODO 스프링 시큐리티 추가 후 ACL 및 권한 및 그룹 설정에 따라 수정 권한 유무를 파악해 라우팅하도록 한다.
+
+        Category category = this.categoryService.findById(id);
+        CategoryCommand command = this.categoryMapper.convert(category);
+        model.addAttribute("command", command);
+        return "category/update";
     }
 
-    @PostMapping
-    public ResponseEntity<String> save(@RequestBody Category category) {
-        this.categoryService.insert(category);
-        return ResponseEntity.ok("ok");
-    }
+    /**
+     * 카테고리 생성
+     *
+     * @param command 커맨드
+     * @param result  검증 결과
+     * @param status  세션 상태
+     * @return 뷰
+     */
+    @PutMapping
+    public String insert(
+            @ModelAttribute("command") @Valid CategoryCommand command,
+            BindingResult result,
+            SessionStatus status
+    ) {
 
-    @PostMapping("/init")
-    public ResponseEntity<String> init() {
-        for (int i = 0; i < 100; i++) {
-            this.save(new Category("name"));
+        if (result.hasErrors()) {
+            return "category/insert";
         }
-        return ResponseEntity.ok("ok");
+
+        Category category = this.categoryMapper.convert(command);
+        this.categoryService.insert(category);
+
+        status.setComplete();
+
+        return "redirect:/category";
+
+    }
+
+    /**
+     * 카테고리 수정
+     *
+     * @param command 커맨드
+     * @param result  검증 결과
+     * @param status  세션 상태
+     * @return 뷰
+     */
+    @PutMapping("/{id}")
+    public String update(
+            @ModelAttribute("command") @Valid CategoryCommand command,
+            BindingResult result,
+            SessionStatus status
+    ) {
+
+        if (result.hasErrors()) {
+            return "category/update";
+        }
+
+        Category category = this.categoryMapper.convert(command);
+        this.categoryService.update(category);
+
+        status.setComplete();
+
+        return "redirect:/category";
+
     }
 
 }
