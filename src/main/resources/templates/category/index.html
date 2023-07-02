@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{/_layout/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Category - index</title>
+
+    <script>
+        const locationHref = (href) => {
+            window.location.href = href;
+        };
+    </script>
+
+</head>
+<body>
+    <main layout:fragment="content">
+        <div class="container mt-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>식별자</th>
+                        <th>이름</th>
+                        <th>등록일시</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="category : ${categories}" th:data-href="|@{/categories/__${category.id}__}|" onclick="locationHref(this.dataset.href)">
+                        <td th:text="${category.id}"></td>
+                        <td th:text="${category.name}"></td>
+                        <td th:text="${#temporals.format(category.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
