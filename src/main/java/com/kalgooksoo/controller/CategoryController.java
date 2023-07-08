@@ -43,6 +43,8 @@ public class CategoryController {
     public String index(Model model, CategoryCriteria criteria) {
         Page<Category> page = this.categoryService.find(criteria);
         model.addAttribute("page", page);
+        model.addAttribute("recordCountPerPage", criteria.getRecordCountPerPage());
+        model.addAttribute("pageSize", criteria.getPageSize());
         return "category/index";
     }
 
