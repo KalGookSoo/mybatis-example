@@ -169,6 +169,12 @@ public class Page<T> {
         return this.firstPageNoOnPageList;
     }
 
+    /**
+     * 이전 페이지 리스트의 마지막 페이지를 반환합니다.
+     * 첫 페이지와 비교하여 최댓값을 반환합니다.
+     * 
+     * @return 이전 페이지 리스트의 마지막 페이지 번호
+     */
     public int getPreviousPageList() {
         return Math.max(this.getFirstPageNoOnPageList() - 1, this.getFirstPageNo());
     }
@@ -187,6 +193,12 @@ public class Page<T> {
         return this.lastPageNoOnPageList;
     }
 
+    /**
+     * 다음 페이지 리스트의 첫 페이지를 반환합니다.
+     * 마지막 페이지와 비교하여 최솟값을 반환합니다.
+     * 
+     * @return 다음 페이지 리스트의 첫 페이지 번호
+     */
     public int getNextPageList() {
         return Math.min(this.getLastPageNoOnPageList() + 1, this.getLastPageNo());
     }
