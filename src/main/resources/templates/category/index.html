@@ -17,6 +17,7 @@
 <body>
     <main layout:fragment="content">
         <div class="container mt-3">
+            <!--/* Table */-->
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -26,13 +27,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="category : ${categories}" th:data-href="|@{/categories/__${category.id}__}|" onclick="locationHref(this.dataset.href)">
+                    <tr th:each="category : ${page.content}" th:data-href="|@{/categories/__${category.id}__}|" onclick="locationHref(this.dataset.href)">
                         <td th:text="${category.id}"></td>
                         <td th:text="${category.name}"></td>
                         <td th:text="${#temporals.format(category.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                     </tr>
                 </tbody>
             </table>
+
+            <!--/* Pagination */-->
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/categories(currentPageNo=${page.firstPageNo})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/categories(currentPageNo=${page.previousPageList})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="pageNo : ${#numbers.sequence(page.firstPageNoOnPageList, page.lastPageNoOnPageList)}" th:classappend="${pageNo == page.currentPageNo} ? active">
+                        <a class="page-link" th:href="@{/categories(currentPageNo=${pageNo})}" th:text="${pageNo}"></a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/categories(currentPageNo=${page.nextPageList})}" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/categories(currentPageNo=${page.lastPageNo})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </main>
 </body>

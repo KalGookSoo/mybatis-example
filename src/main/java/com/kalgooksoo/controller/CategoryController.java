@@ -1,6 +1,7 @@
 package com.kalgooksoo.controller;
 
 import com.kalgooksoo.command.CategoryCommand;
+import com.kalgooksoo.core.Page;
 import com.kalgooksoo.criteria.CategoryCriteria;
 import com.kalgooksoo.mapstruct.CategoryMapper;
 import com.kalgooksoo.model.Category;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.validation.Valid;
-import java.util.Collection;
 
 @Controller
 @RequestMapping("/categories")
@@ -41,8 +41,8 @@ public class CategoryController {
      */
     @GetMapping
     public String index(Model model, CategoryCriteria criteria) {
-        Collection<Category> categories = this.categoryService.findByPage(criteria);
-        model.addAttribute("categories", categories);
+        Page<Category> page = this.categoryService.find(criteria);
+        model.addAttribute("page", page);
         return "category/index";
     }
 
