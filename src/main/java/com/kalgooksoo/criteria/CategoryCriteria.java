@@ -1,8 +1,6 @@
 package com.kalgooksoo.criteria;
 
-import com.kalgooksoo.model.Category;
-
-public class CategoryCriteria extends Criteria<Category> {
+public class CategoryCriteria extends PageRequest {
     private String name;
 
     public String getName() {

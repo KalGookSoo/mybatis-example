@@ -25,8 +25,9 @@
         WHERE id = #{id}
     </delete>
 
-    <select id="findByPage" parameterType="com.kalgooksoo.criteria.Criteria" resultType="com.kalgooksoo.model.Category">
-        SELECT * FROM tb_category
+    <select id="findByPage" parameterType="com.kalgooksoo.criteria.PageRequest" resultType="com.kalgooksoo.model.Category">
+        SELECT *
+        FROM tb_category
         <where>
             <if test="name != null and name != ''">
                 AND name LIKE CONCAT('%', #{name}, '%')
@@ -34,7 +35,17 @@
         </where>
         ORDER BY id desc
         OFFSET #{offset} ROWS
-        FETCH NEXT #{limit} ROWS ONLY
+        FETCH NEXT #{recordCountPerPage} ROWS ONLY
+    </select>
+
+    <select id="totalRecordCount" parameterType="com.kalgooksoo.criteria.PageRequest" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM tb_category
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+        </where>
     </select>
 
 </mapper>
