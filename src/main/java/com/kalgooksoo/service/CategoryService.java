@@ -1,5 +1,6 @@
 package com.kalgooksoo.service;
 
+import com.kalgooksoo.core.Page;
 import com.kalgooksoo.criteria.CategoryCriteria;
 import com.kalgooksoo.mapper.CategoryMapper;
 import com.kalgooksoo.model.Category;
@@ -22,9 +23,9 @@ public class CategoryService {
         return this.categoryMapper.findAll();
     }
 
-    public Collection<Category> findByPage(CategoryCriteria criteria) {
+    public Page<Category> find(CategoryCriteria criteria) {
         // TODO 정렬 처리할 것
-        return this.categoryMapper.findByPage(criteria);
+        return this.categoryMapper.find(criteria);
     }
 
     public Category findById(Long id) {
