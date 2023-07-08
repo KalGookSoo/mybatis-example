@@ -1,12 +1,11 @@
 package com.kalgooksoo.controller;
 
+import com.kalgooksoo.core.Page;
 import com.kalgooksoo.criteria.CategoryCriteria;
 import com.kalgooksoo.model.Category;
 import com.kalgooksoo.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -19,8 +18,8 @@ public class CategoryApiController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<Category>> findAll(CategoryCriteria criteria) {
-        return ResponseEntity.ok(this.categoryService.findByPage(criteria));
+    public ResponseEntity<Page<Category>> findAll(CategoryCriteria criteria) {
+        return ResponseEntity.ok(this.categoryService.find(criteria));
     }
 
     @GetMapping("{id}")
