@@ -64,4 +64,10 @@
         </where>
     </select>
 
+    <update id="increaseHit" parameterType="java.lang.Long">
+        UPDATE tb_board
+        SET hit = hit + 1
+        WHERE id = #{id}
+    </update>
+
 </mapper>

@@ -71,7 +71,7 @@ public class BoardController {
 
         // TODO 스프링 시큐리티 추가 후 ACL 및 권한 및 그룹 설정에 따라 수정 권한 유무를 파악해 라우팅하도록 한다.
 
-        Board board = this.boardService.findById(id);
+        Board board = this.boardService.view(id);
         BoardCommand command = this.boardMapper.convert(board);
         model.addAttribute("command", command);
         return "board/update";
