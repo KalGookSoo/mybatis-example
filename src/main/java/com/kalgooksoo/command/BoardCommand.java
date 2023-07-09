@@ -1,5 +1,6 @@
 package com.kalgooksoo.command;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class BoardCommand {
@@ -8,15 +9,20 @@ public class BoardCommand {
     @NotNull
     private Long categoryId;
 
+    @NotBlank
     private String author;
 
-    @NotNull
+    @NotBlank
     private String title;
 
-    @NotNull
+    @NotBlank
     private String content;
 
     public BoardCommand() {
+    }
+
+    public BoardCommand(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Long getId() {
