@@ -16,27 +16,27 @@ public interface BoardMapper {
     BoardMapper INSTANCE = Mappers.getMapper(BoardMapper.class);
 
     /**
-     * 카테고리 커맨드를 카테고리 엔티티로 변환합니다.
+     * 게시글 커맨드를 게시글 엔티티로 변환합니다.
      *
-     * @param boardCommand 카테고리 커맨드
-     * @return 카테고리 엔티티
+     * @param boardCommand 게시글 커맨드
+     * @return 게시글 엔티티
      */
     Board convert(BoardCommand boardCommand);
 
     /**
-     * 카테고리 엔티티를 카테고리 커맨드로 변환합니다.
+     * 게시글 엔티티를 게시글 커맨드로 변환합니다.
      *
-     * @param board 카테고리 엔티티
-     * @return 카테고리 커맨드
+     * @param board 게시글 엔티티
+     * @return 게시글 커맨드
      */
     BoardCommand convert(Board board);
 
     /**
-     * 카테고리 엔티티에 카테고리 커맨드를 병합합니다.
+     * 게시글 엔티티에 게시글 커맨드를 병합합니다.
      *
-     * @param board        카테고리 엔티티
-     * @param boardCommand 카테고리 커맨드
-     * @return 카테고리 엔티티
+     * @param board        게시글 엔티티
+     * @param boardCommand 게시글 커맨드
+     * @return 게시글 엔티티
      */
     @Mapping(target = "id", ignore = true)
     Board merge(@MappingTarget Board board, BoardCommand boardCommand);
