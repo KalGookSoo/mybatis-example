@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 
 import javax.validation.Valid;
 
@@ -69,14 +68,12 @@ public class CategoryController {
      *
      * @param command 커맨드
      * @param result  검증 결과
-     * @param status  세션 상태
      * @return 뷰
      */
     @PutMapping
     public String insert(
             @ModelAttribute("command") @Valid CategoryCommand command,
-            BindingResult result,
-            SessionStatus status
+            BindingResult result
     ) {
 
         if (result.hasErrors()) {
@@ -85,8 +82,6 @@ public class CategoryController {
 
         Category category = this.categoryMapper.convert(command);
         this.categoryService.insert(category);
-
-        status.setComplete();
 
         return "redirect:/category";
 
@@ -97,14 +92,12 @@ public class CategoryController {
      *
      * @param command 커맨드
      * @param result  검증 결과
-     * @param status  세션 상태
      * @return 뷰
      */
     @PutMapping("/{id}")
     public String update(
             @ModelAttribute("command") @Valid CategoryCommand command,
-            BindingResult result,
-            SessionStatus status
+            BindingResult result
     ) {
 
         if (result.hasErrors()) {
@@ -113,8 +106,6 @@ public class CategoryController {
 
         Category category = this.categoryMapper.convert(command);
         this.categoryService.update(category);
-
-        status.setComplete();
 
         return "redirect:/category";
 
