@@ -40,7 +40,7 @@ public class BoardController {
      */
     @GetMapping
     public String index(Model model, BoardCriteria criteria) {
-        Page<Board> page = this.boardService.find(criteria);
+        Page<Board> page = this.boardService.findByCategoryId(criteria);
         model.addAttribute("page", page);
         return "board/index";
     }

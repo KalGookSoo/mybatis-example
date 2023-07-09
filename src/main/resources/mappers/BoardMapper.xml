@@ -1,7 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kalgooksoo.mapper.BoardMapper">
     <insert id="insert" parameterType="com.kalgooksoo.model.Board">
-        INSERT INTO tb_board (categoryId, author, title, hit, content, created_at)
+        INSERT INTO tb_board (category_id, author, title, hit, content, created_at)
         VALUES (#{categoryId}, #{author}, #{title}, 0, #{content}, CURRENT_TIMESTAMP)
     </insert>
 
@@ -31,11 +31,14 @@
         SELECT *
         FROM tb_board
         <where>
-            <if test="value != null and value != ''">
+            <if test="categoryId != null and categoryId != ''">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="searchTerm != null and searchTerm != ''">
                 AND (
-                    author LIKE CONCAT('%', #{value}, '%')
-                    OR title LIKE CONCAT('%', #{value}, '%')
-                    OR content LIKE CONCAT('%', #{value}, '%')
+                    author LIKE CONCAT('%', #{searchTerm}, '%')
+                    OR title LIKE CONCAT('%', #{searchTerm}, '%')
+                    OR content LIKE CONCAT('%', #{searchTerm}, '%')
                 )
             </if>
         </where>
@@ -48,11 +51,14 @@
         SELECT count(*)
         FROM tb_board
         <where>
-            <if test="value != null and value != ''">
+            <if test="categoryId != null and categoryId != ''">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="searchTerm != null and searchTerm != ''">
                 AND (
-                author LIKE CONCAT('%', #{value}, '%')
-                OR title LIKE CONCAT('%', #{value}, '%')
-                OR content LIKE CONCAT('%', #{value}, '%')
+                author LIKE CONCAT('%', #{searchTerm}, '%')
+                OR title LIKE CONCAT('%', #{searchTerm}, '%')
+                OR content LIKE CONCAT('%', #{searchTerm}, '%')
                 )
             </if>
         </where>
