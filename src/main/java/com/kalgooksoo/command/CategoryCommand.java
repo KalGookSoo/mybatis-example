@@ -1,7 +1,13 @@
 package com.kalgooksoo.command;
 
+
+import javax.validation.constraints.NotBlank;
+
 public class CategoryCommand {
+
     private Long id;
+
+    @NotBlank
     private String name;
 
     public CategoryCommand(Long id, String name) {
