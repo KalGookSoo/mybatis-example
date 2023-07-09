@@ -70,20 +70,20 @@ public class CategoryController {
      * @param result  검증 결과
      * @return 뷰
      */
-    @PutMapping
+    @PostMapping
     public String insert(
             @ModelAttribute("command") @Valid CategoryCommand command,
             BindingResult result
     ) {
 
         if (result.hasErrors()) {
-            return "category/insert";
+            return "category/save";
         }
 
         Category category = this.categoryMapper.convert(command);
         this.categoryService.insert(category);
 
-        return "redirect:/category";
+        return "redirect:/categories";
 
     }
 
