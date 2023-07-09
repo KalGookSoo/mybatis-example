@@ -1,0 +1,61 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalgooksoo.mapper.BoardMapper">
+    <insert id="insert" parameterType="com.kalgooksoo.model.Board">
+        INSERT INTO tb_board (categoryId, author, title, hit, content, created_at)
+        VALUES (#{categoryId}, #{author}, #{title}, 0, #{content}, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="findAll" resultType="com.kalgooksoo.model.Board">
+        SELECT * FROM tb_board
+    </select>
+
+    <select id="findById" parameterType="java.lang.Long" resultType="com.kalgooksoo.model.Board">
+        SELECT * FROM tb_board WHERE id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.kalgooksoo.model.Board">
+        UPDATE tb_board
+        SET title = #{title},
+            content = #{content},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        UPDATE tb_board
+        SET deleted_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </delete>
+
+    <select id="findByPage" parameterType="com.kalgooksoo.criteria.PageRequest" resultType="com.kalgooksoo.model.Board">
+        SELECT *
+        FROM tb_board
+        <where>
+            <if test="value != null and value != ''">
+                AND (
+                    author LIKE CONCAT('%', #{value}, '%')
+                    OR title LIKE CONCAT('%', #{value}, '%')
+                    OR content LIKE CONCAT('%', #{value}, '%')
+                )
+            </if>
+        </where>
+        ORDER BY id desc
+        OFFSET #{offset} ROWS
+        FETCH NEXT #{recordCountPerPage} ROWS ONLY
+    </select>
+
+    <select id="totalRecordCount" parameterType="com.kalgooksoo.criteria.PageRequest" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM tb_board
+        <where>
+            <if test="value != null and value != ''">
+                AND (
+                author LIKE CONCAT('%', #{value}, '%')
+                OR title LIKE CONCAT('%', #{value}, '%')
+                OR content LIKE CONCAT('%', #{value}, '%')
+                )
+            </if>
+        </where>
+    </select>
+
+</mapper>
