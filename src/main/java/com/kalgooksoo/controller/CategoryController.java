@@ -46,6 +46,18 @@ public class CategoryController {
     }
 
     /**
+     * 카테고리 저장 페이지
+     * 
+     * @param model 모델
+     * @return 뷰
+     */
+    @GetMapping("/save")
+    public String save(Model model) {
+        model.addAttribute("command", new CategoryCommand());
+        return "category/save";
+    }
+    
+    /**
      * 카테고리 수정 페이지
      *
      * @param model 모델
