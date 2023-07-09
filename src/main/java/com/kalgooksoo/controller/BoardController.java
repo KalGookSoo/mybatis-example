@@ -20,7 +20,7 @@ public class BoardController {
     /**
      * 게시글 관리 서비스 객체
      */
-    private BoardService boardService;
+    private final BoardService boardService;
 
     /**
      * 게시글 데이터 변환 매퍼
@@ -70,7 +70,7 @@ public class BoardController {
      * @param result  검증 결과
      * @return 뷰
      */
-    @PutMapping
+    @PostMapping
     public String insert(
             @ModelAttribute("command") @Valid BoardCommand command,
             BindingResult result
@@ -80,10 +80,11 @@ public class BoardController {
             return "board/save";
         }
 
+        //TODO 스프링 시큐리티 추가된 이후에 익명 또는 UserPrincipal 구현체에서 username 꺼내와 주입시켜야 함
         Board board = this.boardMapper.convert(command);
         this.boardService.insert(board);
 
-        return "redirect:/board";
+        return "redirect:/boards";
 
     }
 
