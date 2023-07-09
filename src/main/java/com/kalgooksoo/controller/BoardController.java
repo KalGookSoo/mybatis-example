@@ -46,6 +46,20 @@ public class BoardController {
     }
 
     /**
+     * 게시글 저장 페이지
+     *
+     * @param model      모델
+     * @param categoryId 카테고리 식별자
+     * @return 뷰
+     */
+    @GetMapping("/save")
+    public String save(Model model, @RequestParam Long categoryId) {
+
+        model.addAttribute("command", new BoardCommand(categoryId));
+        return "board/save";
+    }
+
+    /**
      * 게시글 수정 페이지
      *
      * @param model 모델
