@@ -23,7 +23,7 @@ public class BoardService {
         return this.boardMapper.findAll();
     }
 
-    public Page<Board> find(BoardCriteria criteria) {
+    public Page<Board> findByCategoryId(BoardCriteria criteria) {
         // TODO 정렬 처리할 것
         return this.boardMapper.find(criteria);
     }
