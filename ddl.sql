@@ -60,13 +60,15 @@ CREATE TABLE tb_product
 /* 사용자 */
 CREATE TABLE tb_user
 (
-    id         SERIAL PRIMARY KEY,
-    username   VARCHAR(255) UNIQUE,
-    name       VARCHAR(255),
-    password   VARCHAR(255),
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP,
-    deleted_at TIMESTAMP
+    id             SERIAL PRIMARY KEY,
+    username       VARCHAR(255) UNIQUE,
+    name           VARCHAR(255),
+    password       VARCHAR(255),
+    email          VARCHAR(255),
+    contact_number VARCHAR(255),
+    created_at     TIMESTAMP,
+    updated_at     TIMESTAMP,
+    deleted_at     TIMESTAMP
 );
 
 /* 권한 */
