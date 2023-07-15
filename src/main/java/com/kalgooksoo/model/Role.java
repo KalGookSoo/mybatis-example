@@ -27,6 +27,20 @@ public class Role extends Timestamped {
      */
     private Set<User> users;
 
+    /**
+     * 생성자
+     *
+     * @param name 이름
+     */
+    public Role(String name) {
+        this.name = name;
+    }
+
+    /**
+     * 이름 접근자
+     *
+     * @return 이름
+     */
     public String getName() {
         return name;
     }
