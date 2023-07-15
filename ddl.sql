@@ -56,3 +56,58 @@ CREATE TABLE tb_product
     deleted_at  TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES tb_category (id)
 );
+
+/* 사용자 */
+CREATE TABLE tb_user
+(
+    id         SERIAL PRIMARY KEY,
+    username   VARCHAR(255) UNIQUE,
+    name       VARCHAR(255),
+    password   VARCHAR(255),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP
+);
+
+/* 권한 */
+CREATE TABLE tb_authority
+(
+    id   SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP
+);
+/* 역할 */
+CREATE TABLE tb_role
+(
+    id   SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP
+);
+
+/* 사용자 - 권한 연계 */
+CREATE TABLE tb_user_authority
+(
+    user_id      INTEGER REFERENCES tb_user (id),
+    authority_id INTEGER REFERENCES tb_authority (id),
+    PRIMARY KEY (user_id, authority_id)
+);
+
+/* 사용자 - 역할 연계 */
+CREATE TABLE tb_user_role
+(
+    user_id INTEGER REFERENCES tb_user (id),
+    role_id INTEGER REFERENCES tb_role (id),
+    PRIMARY KEY (user_id, role_id)
+);
+
+/* 권한 - 역할 연계 */
+CREATE TABLE tb_authority_role
+(
+    authority_id INTEGER REFERENCES tb_authority (id),
+    role_id      INTEGER REFERENCES tb_role (id),
+    PRIMARY KEY (authority_id, role_id)
+);
