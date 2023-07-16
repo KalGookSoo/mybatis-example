@@ -1,8 +1,11 @@
 package com.kalgooksoo.service;
 
+import com.kalgooksoo.mapper.RoleMapper;
 import com.kalgooksoo.mapper.UserMapper;
+import com.kalgooksoo.mapper.UserRoleMapper;
 import com.kalgooksoo.model.Role;
 import com.kalgooksoo.model.User;
+import com.kalgooksoo.model.UserRole;
 import com.kalgooksoo.security.UserPrincipal;
 import com.kalgooksoo.security.provider.FacebookUserDetail;
 import com.kalgooksoo.security.provider.GoogleUserDetail;
@@ -34,12 +37,26 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     private final UserMapper userMapper;
 
     /**
+     * 역할 MyBatis 매퍼
+     */
+    private final RoleMapper roleMapper;
+
+    /**
+     * 사용자 - 역할 연계 MyBatis 매퍼
+     */
+    private final UserRoleMapper userRoleMapper;
+
+    /**
      * 생성자
      *
-     * @param userMapper 사용자 MyBatis 매퍼
+     * @param userMapper     사용자 MyBatis 매퍼
+     * @param roleMapper     역할 MyBatis 매퍼
+     * @param userRoleMapper 사용자 - 역할 연계 MyBatis 매퍼
      */
-    public PrincipalOauth2UserService(UserMapper userMapper) {
+    public PrincipalOauth2UserService(UserMapper userMapper, RoleMapper roleMapper, UserRoleMapper userRoleMapper) {
         this.userMapper = userMapper;
+        this.roleMapper = roleMapper;
+        this.userRoleMapper = userRoleMapper;
     }
 
     /**
@@ -61,7 +78,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         logger.info("Attributes: {}", oAuth2User.getAttributes());
 
         /* 페이스북의 PK가 다르므로 */
-        OAuth2UserDetail oAuth2UserDetail = null;
+        OAuth2UserDetail oAuth2UserDetail;
         if ("google".equals(userRequest.getClientRegistration().getRegistrationId())) {
             oAuth2UserDetail = new GoogleUserDetail(oAuth2User.getAttributes());
         } else if ("facebook".equals(userRequest.getClientRegistration().getRegistrationId())) {
@@ -69,7 +86,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         } else if ("naver".equals(userRequest.getClientRegistration().getRegistrationId())) {
             oAuth2UserDetail = new NaverUserDetail(oAuth2User.getAttributes());
         } else {
-            logger.error("인증 실패");
+            throw new OAuth2AuthenticationException("OAuth2.0 에러에 대한 커스텀 에러코드를 여기에 넣어야 합니다.");
         }
 
         String provider = oAuth2UserDetail.getProvider();
@@ -77,10 +94,17 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String username = provider + "_" + providerId;
         String email = oAuth2UserDetail.getEmail();
 
-        /* 사용자가 있으면 select 없으면 insert */
+        /* 사용자를 조회했을 때 없으면 생성하여 반환합니다. */
         User foundUser = Optional.ofNullable(userMapper.findByUsername(email)).orElseGet(() -> {
-            User user = new User(username, email).addRole(new Role("ROLE_USER"));
-            userMapper.insert(user);
+
+            /* ROLE_USER 역할을 가진 사용자를 생성합니다. */
+            Role role = roleMapper.findByName("ROLE_USER");
+            User user = new User(username, email).addRole(role);
+            Long userId = userMapper.insert(user);
+
+            /* 회원을 역할에 매핑합니다. */
+            UserRole userRole = new UserRole(userId, role.getId());
+            userRoleMapper.insert(userRole);
             return user;
         });
 
