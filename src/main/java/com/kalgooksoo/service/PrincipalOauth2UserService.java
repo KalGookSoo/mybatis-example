@@ -20,7 +20,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
@@ -94,9 +95,19 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String username = provider + "_" + providerId;
         String email = oAuth2UserDetail.getEmail();
 
-        //TODO findByUsername에 사용자가 존재할 경우에 해당 사용자가 가진 Role을 함께 가져와서 UserPrincipal 생성자의 인자로 넣어야 합니다.
         /* 사용자를 조회했을 때 없으면 생성하여 반환합니다. */
-        User foundUser = Optional.ofNullable(userMapper.findByUsername(username)).orElseGet(() -> {
+        User foundUser = userMapper.findByUsername(username);
+
+        if (foundUser != null) {
+
+            /* 조회한 회원이 가지고 있는 역할을 조회합니다. */
+            List<Long> roleIds = userRoleMapper.findByUserId(foundUser.getId())
+                    .stream().map(UserRole::getRoleId)
+                    .collect(Collectors.toList());
+            Set<Role> roles = roleMapper.findByUserIdIn(roleIds);
+            foundUser.setRoles(roles);
+
+        } else {
 
             /* ROLE_USER 역할을 가진 사용자를 생성합니다. */
             Role role = roleMapper.findByName("ROLE_USER");
@@ -106,8 +117,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             /* 회원을 역할에 매핑합니다. */
             UserRole userRole = new UserRole(userId, role.getId());
             userRoleMapper.insert(userRole);
-            return user;
-        });
+            foundUser = user;
+
+        }
 
         return new UserPrincipal(foundUser, oAuth2User.getAttributes());
     }
