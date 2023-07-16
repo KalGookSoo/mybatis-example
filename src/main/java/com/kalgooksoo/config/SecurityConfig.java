@@ -46,12 +46,12 @@ public class SecurityConfig {
                 .formLogin()                                        // <form>을 활용한 로그인 설정합니다.
                 .loginPage("/sign-in")                              // "/sign-in" 요청을 통해 포워드 되는 페이지에서 로그인 합니다.
                 .loginProcessingUrl("/sign-in")                     // "/sign-in" 요청을 통해 로그인을 진행합니다.
-                .successHandler((request, response, authentication) -> response.sendRedirect("/users"))
+                .successHandler((request, response, authentication) -> response.sendRedirect("/"))
                 .usernameParameter("username")                      // 식별자 name을 "username"으로 설정합니다.
                 .and()
                 .oauth2Login()                                      // OAuth2.0을 활용한 로그인 설정입니다.
                 .loginPage("/sign-in")                              // "/sign-in" 요청을 통해 포워드 되는 페이지에서 로그인 합니다.
-                .successHandler((request, response, authentication) -> response.sendRedirect("/users"))
+                .successHandler((request, response, authentication) -> response.sendRedirect("/"))
 //                .failureHandler((request, response, exception) -> {}) // DefaultOAuth2UserService#loadUser에서 UsernameNotFoundException 을 발생시킨 후 sign-up 폼으로 넘기면 OAuth2.0 기반 커스텀 sign-up이 가능합니다.
                 .userInfoEndpoint()                                 // OAuth 2.0 제공 업체의 사용자 정보 엔드포인트에 대한 설정을 사용할 수 있도록 선언합니다.
                 .userService(principalOauth2UserService);           // DefaultOAuth2UserService 을 확장한 클래스를 선언합니다.
