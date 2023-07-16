@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kalgooksoo.mapper.CategoryMapper">
-    <insert id="insert" parameterType="com.kalgooksoo.model.Category">
+    <insert id="insert" parameterType="com.kalgooksoo.model.Category" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO tb_category (name, created_at)
         VALUES (#{name}, CURRENT_TIMESTAMP)
     </insert>

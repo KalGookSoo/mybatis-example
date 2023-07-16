@@ -60,8 +60,8 @@ public class BoardService {
         return board;
     }
 
-    public void insert(Board board) {
-        this.boardMapper.insert(board);
+    public Long insert(Board board) {
+        return this.boardMapper.insert(board);
     }
 
     public void update(Board board) {

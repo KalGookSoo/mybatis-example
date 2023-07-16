@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kalgooksoo.mapper.BoardMapper">
-    <insert id="insert" parameterType="com.kalgooksoo.model.Board">
+    <insert id="insert" parameterType="com.kalgooksoo.model.Board" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO tb_board (category_id, author, title, hit, content, created_at)
         VALUES (#{categoryId}, #{author}, #{title}, 0, #{content}, CURRENT_TIMESTAMP)
     </insert>
@@ -31,6 +31,7 @@
         SELECT *
         FROM tb_board
         <where>
+            AND delete_at IS NULL
             <if test="categoryId != null and categoryId != ''">
                 AND category_id = #{categoryId}
             </if>
@@ -51,6 +52,7 @@
         SELECT count(*)
         FROM tb_board
         <where>
+            AND delete_at IS NULL
             <if test="categoryId != null and categoryId != ''">
                 AND category_id = #{categoryId}
             </if>
