@@ -44,4 +44,13 @@ public class Role extends Timestamped {
     public String getName() {
         return name;
     }
+
+    /**
+     * 역할 식별자 접근자
+     *
+     * @return 역할 식별자
+     */
+    public Long getId() {
+        return id;
+    }
 }

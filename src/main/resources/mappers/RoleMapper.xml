@@ -1,0 +1,62 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalgooksoo.mapper.RoleMapper">
+    <insert id="insert" parameterType="com.kalgooksoo.model.Role" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_role (username, name, password, email, contact_number, created_at)
+        VALUES (#{username}, #{name}, #{password}, #{email}, #{contactNumber}, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="findAll" resultType="com.kalgooksoo.model.Role">
+        SELECT * FROM tb_role
+    </select>
+
+    <select id="findById" parameterType="java.lang.Long" resultType="com.kalgooksoo.model.Role">
+        SELECT * FROM tb_role WHERE id = #{id}
+    </select>
+
+    <select id="findByName" parameterType="java.lang.String" resultType="com.kalgooksoo.model.Role">
+        SELECT * FROM tb_role WHERE name = #{name}
+    </select>
+
+    <update id="update" parameterType="com.kalgooksoo.model.Role">
+        UPDATE tb_role
+        SET name = #{name},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        UPDATE tb_role
+        SET deleted_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </delete>
+
+    <select id="findByPage" parameterType="com.kalgooksoo.criteria.PageRequest" resultType="com.kalgooksoo.model.Role">
+        SELECT *
+        FROM tb_role
+        <where>
+            AND delete_at IS NULL
+            <if test="searchTerm != null and searchTerm != ''">
+                AND (
+                    name LIKE CONCAT('%', #{searchTerm}, '%')
+                )
+            </if>
+        </where>
+        ORDER BY id desc
+        OFFSET #{offset} ROWS
+        FETCH NEXT #{recordCountPerPage} ROWS ONLY
+    </select>
+
+    <select id="totalRecordCount" parameterType="com.kalgooksoo.criteria.PageRequest" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM tb_role
+        <where>
+            AND delete_at IS NULL
+            <if test="searchTerm != null and searchTerm != ''">
+                AND (
+                    name LIKE CONCAT('%', #{searchTerm}, '%')
+                )
+            </if>
+        </where>
+    </select>
+
+</mapper>
