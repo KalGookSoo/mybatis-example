@@ -11,6 +11,9 @@ public interface UserMapper extends CRUDMapper<User, Long> {
 
     /**
      * 아이디에 해당되는 사용자 정보를 반환합니다.
+     *
+     * @param username 아이디
+     * @return 사용자
      */
     User findByUsername(String username);
 
