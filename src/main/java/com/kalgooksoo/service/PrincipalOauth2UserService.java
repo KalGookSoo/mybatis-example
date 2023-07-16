@@ -94,8 +94,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String username = provider + "_" + providerId;
         String email = oAuth2UserDetail.getEmail();
 
+        //TODO findByUsername에 사용자가 존재할 경우에 해당 사용자가 가진 Role을 함께 가져와서 UserPrincipal 생성자의 인자로 넣어야 합니다.
         /* 사용자를 조회했을 때 없으면 생성하여 반환합니다. */
-        User foundUser = Optional.ofNullable(userMapper.findByUsername(email)).orElseGet(() -> {
+        User foundUser = Optional.ofNullable(userMapper.findByUsername(username)).orElseGet(() -> {
 
             /* ROLE_USER 역할을 가진 사용자를 생성합니다. */
             Role role = roleMapper.findByName("ROLE_USER");
