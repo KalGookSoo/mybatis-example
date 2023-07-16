@@ -157,4 +157,13 @@ public class UserPrincipal implements UserDetails, OAuth2User, Serializable {
     public Map<String, Object> getAttributes() {
         return attributes;
     }
+
+    /**
+     * 사용자 접근자
+     * 
+     * @return 사용자
+     */
+    public User getUser() {
+        return user;
+    }
 }
