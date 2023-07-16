@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CRUDMapper<T, ID> {
 
-    void insert(T entity);
+    ID insert(T entity);
 
     List<T> findAll();
 

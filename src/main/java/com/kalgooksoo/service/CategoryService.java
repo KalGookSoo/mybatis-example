@@ -32,8 +32,8 @@ public class CategoryService {
         return this.categoryMapper.findById(id);
     }
 
-    public void insert(Category category) {
-        this.categoryMapper.insert(category);
+    public Long insert(Category category) {
+        return this.categoryMapper.insert(category);
     }
 
     public void update(Category category) {
