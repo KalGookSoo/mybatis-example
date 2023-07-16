@@ -55,8 +55,8 @@ public class UserService {
      *
      * @param user 사용자
      */
-    public void insert(User user) {
-        this.userMapper.insert(user);
+    public Long insert(User user) {
+        return this.userMapper.insert(user);
     }
 
     /**

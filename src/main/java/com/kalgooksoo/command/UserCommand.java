@@ -1,13 +1,20 @@
-package com.kalgooksoo.criteria;
+package com.kalgooksoo.command;
 
-/**
- * 사용자 검색 조건
- */
-public class UserCriteria extends PageRequest {
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
+public class UserCommand {
 
     /**
-     * 아이디
+     * 식별자
      */
+    private Long id;
+
+    /**
+     * 아이디(Alternate Key)
+     */
+    @NotBlank
     private String username;
 
     /**
@@ -16,83 +23,67 @@ public class UserCriteria extends PageRequest {
     private String name;
 
     /**
+     * 패스워드
+     */
+    @NotBlank
+    private String password;
+
+    /**
      * 이메일
      */
+    @Email
     private String email;
 
     /**
      * 연락처
      */
+    @NotBlank
     private String contactNumber;
 
-    /**
-     * 아이디 접근자
-     *
-     * @return 아이디
-     */
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
 
-    /**
-     * 아이디 설정자
-     *
-     * @param username 아이디
-     */
     public void setUsername(String username) {
         this.username = username;
     }
 
-    /**
-     * 이름 접근자
-     *
-     * @return 이름
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * 이름 설정자
-     *
-     * @param name 이름
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * 이메일 접근자
-     * 
-     * @return 이메일
-     */
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    /**
-     * 이메일 설정자
-     * 
-     * @param email 이메일
-     */
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     * 연락처 접근자
-     * 
-     * @return 연락처
-     */
     public String getContactNumber() {
         return contactNumber;
     }
 
-    /**
-     * 연락처 설정자
-     * 
-     * @param contactNumber 연락처
-     */
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }

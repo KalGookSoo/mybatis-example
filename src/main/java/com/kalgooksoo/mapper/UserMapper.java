@@ -3,6 +3,9 @@ package com.kalgooksoo.mapper;
 import com.kalgooksoo.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
+/**
+ * 사용자 MyBatis 매퍼
+ */
 @Mapper
 public interface UserMapper extends CRUDMapper<User, Long> {
 

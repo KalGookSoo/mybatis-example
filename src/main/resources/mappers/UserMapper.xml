@@ -1,0 +1,70 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kalgooksoo.mapper.UserMapper">
+    <insert id="insert" parameterType="com.kalgooksoo.model.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_user (username, name, password, email, contact_number, created_at)
+        VALUES (#{username}, #{name}, #{password}, #{email}, #{contactNumber}, CURRENT_TIMESTAMP)
+    </insert>
+
+    <select id="findAll" resultType="com.kalgooksoo.model.User">
+        SELECT * FROM tb_user
+    </select>
+
+    <select id="findById" parameterType="java.lang.Long" resultType="com.kalgooksoo.model.User">
+        SELECT * FROM tb_user WHERE id = #{id}
+    </select>
+
+    <select id="findByUsername" parameterType="java.lang.String" resultType="com.kalgooksoo.model.User">
+        SELECT * FROM tb_user WHERE username = #{username}
+    </select>
+
+    <update id="update" parameterType="com.kalgooksoo.model.User">
+        UPDATE tb_user
+        SET name = #{name},
+            email = #{email},
+            contact_number = #{contactNumber},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        UPDATE tb_user
+        SET deleted_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </delete>
+
+    <select id="findByPage" parameterType="com.kalgooksoo.criteria.PageRequest" resultType="com.kalgooksoo.model.User">
+        SELECT *
+        FROM tb_user
+        <where>
+            AND delete_at IS NULL
+            <if test="searchTerm != null and searchTerm != ''">
+                AND (
+                    username LIKE CONCAT('%', #{searchTerm}, '%')
+                    OR name LIKE CONCAT('%', #{searchTerm}, '%')
+                    OR email LIKE CONCAT('%', #{searchTerm}, '%')
+                    OR contactNumber LIKE CONCAT('%', #{searchTerm}, '%')
+                )
+            </if>
+        </where>
+        ORDER BY id desc
+        OFFSET #{offset} ROWS
+        FETCH NEXT #{recordCountPerPage} ROWS ONLY
+    </select>
+
+    <select id="totalRecordCount" parameterType="com.kalgooksoo.criteria.PageRequest" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM tb_user
+        <where>
+            AND delete_at IS NULL
+            <if test="searchTerm != null and searchTerm != ''">
+                AND (
+                username LIKE CONCAT('%', #{searchTerm}, '%')
+                OR name LIKE CONCAT('%', #{searchTerm}, '%')
+                OR email LIKE CONCAT('%', #{searchTerm}, '%')
+                OR contactNumber LIKE CONCAT('%', #{searchTerm}, '%')
+                )
+            </if>
+        </where>
+    </select>
+
+</mapper>
