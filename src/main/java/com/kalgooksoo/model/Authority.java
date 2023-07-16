@@ -14,7 +14,7 @@ public class Authority extends Timestamped {
     private Long id;
 
     /**
-     * 이름
+     * 이름(Alternate Key)
      */
     private String name;
 

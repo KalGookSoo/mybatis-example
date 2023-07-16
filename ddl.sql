@@ -75,20 +75,30 @@ CREATE TABLE tb_user
 CREATE TABLE tb_authority
 (
     id   SERIAL PRIMARY KEY,
-    name VARCHAR(255),
+    name VARCHAR(255) UNIQUE,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     deleted_at TIMESTAMP
 );
+
+INSERT INTO tb_authority (name, created_at) VALUES ('CREATE_PRIVILEGE', CURRENT_TIMESTAMP);
+INSERT INTO tb_authority (name, created_at) VALUES ('READ_PRIVILEGE', CURRENT_TIMESTAMP);
+INSERT INTO tb_authority (name, created_at) VALUES ('UPDATE_PRIVILEGE', CURRENT_TIMESTAMP);
+INSERT INTO tb_authority (name, created_at) VALUES ('DELETE_PRIVILEGE', CURRENT_TIMESTAMP);
+
 /* 역할 */
 CREATE TABLE tb_role
 (
     id   SERIAL PRIMARY KEY,
-    name VARCHAR(255),
+    name VARCHAR(255) UNIQUE,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     deleted_at TIMESTAMP
 );
+
+INSERT INTO tb_user_role (name, created_at) VALUES ('ROLE_USER', CURRENT_TIMESTAMP);
+INSERT INTO tb_user_role (name, created_at) VALUES ('ROLE_MANAGER', CURRENT_TIMESTAMP);
+INSERT INTO tb_user_role (name, created_at) VALUES ('ROLE_ADMIN', CURRENT_TIMESTAMP);
 
 /* 사용자 - 권한 연계 */
 CREATE TABLE tb_user_authority
